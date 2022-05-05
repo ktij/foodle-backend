@@ -70,8 +70,13 @@ app.get('/download-bucket-image/:bucketName/:fileName', async function (req, res
 
     console.log("bucketName",bucketName)
     console.log("fileName",fileName)
+    try{
+        const file = storage.bucket(bucketName).file(fileName);
 
-    const file = storage.bucket(bucketName).file(fileName);
+    }
+    catch(error){
+        res.send(400).send({error, message:"Failed to process image"})
+    }
     // const filePath = `gs://${bucketName}/${fileName}`;
 
     // Download file from bucket.
@@ -81,6 +86,7 @@ app.get('/download-bucket-image/:bucketName/:fileName', async function (req, res
             console.log(`Downloaded ${file.name} to ${"./tmp/test"}.`);
         } catch (err) {
             throw new Error(`File download failed: ${err}`);
+            res.sendStatus(400)
         }
     };
 
