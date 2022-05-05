@@ -77,7 +77,7 @@ app.get('/download-bucket-image/:bucketName/:fileName', async function (req, res
     // Download file from bucket.
     async function downloadFile() {
         try {
-            await file.download({destination: "/tmp/test"});
+            await file.download({destination: "./tmp/test"});
             console.log(`Downloaded ${file.name} to ${"./tmp/test"}.`);
         } catch (err) {
             throw new Error(`File download failed: ${err}`);
