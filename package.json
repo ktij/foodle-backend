@@ -1,0 +1,32 @@
+{
+  "name": "foodle-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@google-cloud/storage": "^5.19.4",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "googleapis": "^100.0.0",
+    "ls": "^0.2.1",
+    "lsf": "^1.0.4",
+    "lsof": "^0.1.0",
+    "multer": "^1.4.4",
+    "nodemon": "^2.0.16"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "npx nodemon ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ktij/foodle-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ktij/foodle-backend/issues"
+  },
+  "homepage": "https://github.com/ktij/foodle-backend#readme"
+}

@@ -32,7 +32,7 @@ const auth = new google.auth.GoogleAuth({
 //     });
 // }
 
-const storage = new Storage({keyFilename: "/credentials.json"});
+const storage = new Storage({keyFilename: "credentials.json"});
 
 app.get('/get-bucket-items/:bucketName', function (req, res) {
     // The ID of your GCS bucket
@@ -63,17 +63,21 @@ app.get('/get-bucket-items/:bucketName', function (req, res) {
     
 })
 
-app.get('/download-bucket-image/:bucketName/:fileName', function (req, res) {
+app.get('/download-bucket-image/:bucketName/:fileName', async function (req, res) {
+    console.log("downloading ")
     var bucketName = req.params.bucketName;
     var fileName = req.params.fileName;
-    
+
+    console.log("bucketName",bucketName)
+    console.log("fileName",fileName)
+
     const file = storage.bucket(bucketName).file(fileName);
     // const filePath = `gs://${bucketName}/${fileName}`;
 
     // Download file from bucket.
     async function downloadFile() {
         try {
-            await file.download({destination: "./tmp/test"});
+            await file.download({destination: "/tmp/test"});
             console.log(`Downloaded ${file.name} to ${"./tmp/test"}.`);
         } catch (err) {
             throw new Error(`File download failed: ${err}`);
@@ -81,7 +85,7 @@ app.get('/download-bucket-image/:bucketName/:fileName', function (req, res) {
     };
 
     // downloadFile();
-    downloadFile().catch(console.error);
+    await downloadFile().catch(console.error);
     res.sendStatus(200).send('OK');
 
     // // Delete the temporary file.
@@ -92,7 +96,7 @@ app.get('/download-bucket-image/:bucketName/:fileName', function (req, res) {
 var server = app.listen(3000, function () {
     var host = server.address().address
     var port = server.address().port
-    // console.log("Example app listening at http://%s:%s", host, port)
+    console.log("Example app listening at http://%s:%s", host, port)
 })
 
 
