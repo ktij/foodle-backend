@@ -2,36 +2,72 @@ var express = require('express');
 var app = express();
 var fs = require("fs");
 const {Storage} = require('@google-cloud/storage');
+const {google} = require('googleapis');
 
 const {promisify} = require('util');
 const path = require('path');
 
-const storage = new Storage();
+const auth = new google.auth.GoogleAuth({
+    keyFile: '/credentials.json',
+    scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+  });
 
-app.get('/get-bucket-items', function (req, res) {
+// // Load client secrets from a local file.
+// fs.readFile('credentials.json', (err, content) => {
+//     if (err) return console.log('Error loading client secret file:', err);
+//     // Authorize a client with credentials
+//     authorize(JSON.parse(content));
+// });
+
+// function authorize(credentials, callback) {
+//     const {client_secret, client_id, redirect_uris} = credentials.installed;
+//     const oAuth2Client = new google.auth.OAuth2(
+//         client_id, client_secret, redirect_uris[0]);
+
+//     // Check if we have previously stored a token.
+//     fs.readFile(TOKEN_PATH, (err, token) => {
+//         if (err) return getAccessToken(oAuth2Client, callback);
+//         oAuth2Client.setCredentials(JSON.parse(token));
+//         callback(oAuth2Client);
+//     });
+// }
+
+const storage = new Storage({keyFilename: "/credentials.json"});
+
+app.get('/get-bucket-items/:bucketName', function (req, res) {
     // The ID of your GCS bucket
-    var bucketName = req.query.bucketName;
+    var bucketName = req.params.bucketName;
     
     async function listFiles() {
         // Lists files in the bucket
         const [files] = await storage.bucket(bucketName).getFiles();
         
         console.log('Files:');
+        var arr = [];
+
         files.forEach(file => {
-            console.log(file.name);
+            arr.push(file.name);
         });
         
-        res.send('{key:value}');
+        return arr;
     }
 
-    listFiles().catch(console.error);
+    var pending_result = listFiles();
+    pending_result.then(function(result){
+        var arr = result;
+        res.send(arr);
+    });
+
+    // var arr = await listFiles();
+    // res.send(arr);
+    
 })
 
-app.get('/download-bucket-image', function (req, res) {
-    var bucketName = req.query.bucketName;
-    var fileName = req.query.fileName;
+app.get('/download-bucket-image/:bucketName/:fileName', function (req, res) {
+    var bucketName = req.params.bucketName;
+    var fileName = req.params.fileName;
     
-    const file = storage.bucket(bucketName).file("test");
+    const file = storage.bucket(bucketName).file(fileName);
     // const filePath = `gs://${bucketName}/${fileName}`;
 
     // Download file from bucket.
@@ -44,7 +80,9 @@ app.get('/download-bucket-image', function (req, res) {
         }
     };
 
-    downloadFile();
+    // downloadFile();
+    downloadFile().catch(console.error);
+    res.sendStatus(200).send('OK');
 
     // // Delete the temporary file.
     // const unlink = promisify(fs.unlink);
