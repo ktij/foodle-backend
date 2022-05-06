@@ -8,22 +8,29 @@ const getItems = (req, res) => {
             const bucketName = req.params.bucketName;
             
             async function listFiles() {
+                try {
+                    const [files] = await storage.bucket(bucketName).getFiles();
+                
+                    var arr = [];
+        
+                    files.forEach(file => {
+                        arr.push(file.name);
+                    });
+                    
+                    return arr;
+                } catch (err) {
+                    res.statusCode=400;
+                    res.json({"error":err, "message":"Failed to get bucket items"});
+                };
                 // Lists files in the bucket
-                const [files] = await storage.bucket(bucketName).getFiles();
                 
-                var arr = [];
-    
-                files.forEach(file => {
-                    arr.push(file.name);
-                });
-                
-                return arr;
             }
             
             var pending_result = listFiles();
             pending_result.then(function(result){
                 var arr = result;
-                res.send(arr);
+                res.statusCode=200;
+                res.json({"items": arr});
             });
     
             return 
@@ -33,7 +40,7 @@ const getItems = (req, res) => {
 
     } catch (err) {
         res.statusCode=400;
-        res.json({err, message:"Failed to get bucket items"});
+        res.json({"error":err, "message":"Failed to get bucket items"});
     };
 }
 module.exports = {getItems};

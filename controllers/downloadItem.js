@@ -17,19 +17,22 @@ async function downloadItem (req, res) {
                 await file.download({destination: "./tmp/test"});
                 console.log(`Downloaded ${file.name} to ${"./tmp/test"}.`);
             } catch (err) {
-                throw new Error(`File download failed: ${err}`);
+                res.statusCode=400;
+                res.json({"error":err, "message":"Download failed"});
             }
         };
 
         // downloadFile();
         await downloadFile();
-        res.sendStatus(200).send('Download complete');
+        res.statusCode=200;
+        res.json({"message": "Download complete"})
 
         // // Delete the temporary file.
         // const unlink = promisify(fs.unlink);
         // unlink(tempLocalPath);
     } catch (err) {
-        res.send(400).send({error, message:"Failed to download item from bucket"})
+        res.statusCode=400;
+        res.json({"error":err, "message": "Download failed"});
     }
 }
 module.exports = {downloadItem};
