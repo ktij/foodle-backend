@@ -20,7 +20,7 @@ const getItems = (req, res) => {
                     return arr;
                 } catch (err) {
                     res.statusCode=400;
-                    res.json({"error":err, "message":"Failed to get bucket items"});
+                    res.json({"error":err.message, "message":"Failed to get bucket items"});
                 };
                 // Lists files in the bucket
                 
@@ -40,7 +40,7 @@ const getItems = (req, res) => {
 
     } catch (err) {
         res.statusCode=400;
-        res.json({"error":err, "message":"Failed to get bucket items"});
+        res.json({"error":err.message, "message":"Failed to get bucket items"});
     };
 }
 module.exports = {getItems};

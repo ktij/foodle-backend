@@ -18,7 +18,7 @@ async function downloadItem (req, res) {
                 console.log(`Downloaded ${file.name} to ${"./tmp/test"}.`);
             } catch (err) {
                 res.statusCode=400;
-                res.json({"error":err, "message":"Download failed"});
+                res.json({"error":err.message, "message":"Download failed"});
             }
         };
 
@@ -26,13 +26,10 @@ async function downloadItem (req, res) {
         await downloadFile();
         res.statusCode=200;
         res.json({"message": "Download complete"})
-
-        // // Delete the temporary file.
-        // const unlink = promisify(fs.unlink);
-        // unlink(tempLocalPath);
+        
     } catch (err) {
         res.statusCode=400;
-        res.json({"error":err, "message": "Download failed"});
+        res.json({"error":err.message, "message": "Download failed"});
     }
 }
 module.exports = {downloadItem};
