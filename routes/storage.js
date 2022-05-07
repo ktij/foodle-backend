@@ -1,7 +1,7 @@
 const {Router} = require('express');
-const { downloadItem } = require('../controllers/downloadItem');
 
 const {getItems} = require('../controllers/getItems');
+const { downloadItem } = require('../controllers/downloadItem');
 
 const storageRouter = Router();
 
