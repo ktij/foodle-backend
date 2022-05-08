@@ -9,7 +9,6 @@ async function downloadItem (req, res) {
         var fileName = req.params.fileName;
 
         const file = storage.bucket(bucketName).file(fileName);
-        // const filePath = `gs://${bucketName}/${fileName}`;
 
         // Download file from bucket.
         async function downloadFile() {

@@ -1,6 +1,5 @@
 const {Storage} = require('@google-cloud/storage');
 const vision = require('@google-cloud/vision');
-// const { text } = require('body-parser');
 
 const storage = new Storage();
 const client = new vision.ImageAnnotatorClient();
@@ -12,26 +11,26 @@ const extractText = (req, res) => {
         const fileName = req.params.fileName;
 
         async function callVisionAI() {
-            // try {
+            try {
                 await client.textDetection(`gs://${bucketName}/${fileName}`)
                 .then((results) => {
-                    // const labels = results[0].labelAnnotations;
-                    
-                    // if ( ("description" in textRes) ) {
-                    //     rstring = textRes.description;
-                    // } else {
-                    //     rstring = "";
-                    // }
-                    res.json({"text": results});
-                    
+                    if (results[0].error != null) { // if error message is returned
+                        res.statusCode=400;
+                        res.json({"error": results[0].error.message});
+                    } else { // no error
+                        if (results[0].textAnnotations.length === 0) { // if text annotations is blank
+                            res.statusCode=200;
+                            res.json({"text": ""});
+                        } else {
+                            res.statusCode=200;
+                            res.json({"text": results[0].textAnnotations[0].description});
+                        }
+                    }
                 });
-                // .catch((err) => 
-                //     console.error("ERROR: ", err)
-                // );
-            // } catch (err) {
-            //     res.statusCode=400;
-            //     res.json({"error":err.message, "message":"Failed to extract text"});
-            // };
+            } catch (err) {
+                res.statusCode=400;
+                res.json({"error":err.message, "message":"Failed to extract text"});
+            };
             
         }
         
