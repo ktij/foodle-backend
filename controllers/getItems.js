@@ -13,19 +13,15 @@ const getItems = (req, res) => {
                 files.forEach(file => {
                     arr.push(file.name);
                 });
-                return arr;
+                res.statusCode=200;
+                res.json({"items": arr});
             } catch (err) {
                 res.statusCode=400;
                 res.json({"error":err.message, "message":"Failed to get bucket items"});
             };
         }
         
-        var pending_result = listFiles();
-        pending_result.then(function(result){
-            var arr = result;
-            res.statusCode=200;
-            res.json({"items": arr});
-        });
+        listFiles();
 
     } catch (err) {
         res.statusCode=400;

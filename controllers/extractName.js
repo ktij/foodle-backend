@@ -5,7 +5,7 @@ const storage = new Storage();
 const client = new vision.ImageAnnotatorClient();
 
 // async function extractText (req, res) {
-const extractText = (req, res) => {
+const extractName = (req, res) => {
     try {
         const bucketName = req.params.bucketName;
         const fileName = req.params.fileName;
@@ -22,12 +22,31 @@ const extractText = (req, res) => {
                             res.statusCode=200;
                             res.json({"text": ""});
                         } else {
+                            var arrText = [];
+                            var arrArea = [];
+                            var arrXdistance = [];
+                            var arrYdistance = [];
+                            textAnnotations = results[0].textAnnotations
+                            for (item in textAnnotations) {
+                                text = textAnnotations[item].description;
+                                boundingPoly = textAnnotations[item].boundingPoly.vertices;
+                                xdistance = boundingPoly[1].x - boundingPoly[0].x;
+                                ydistance = boundingPoly[2].y - boundingPoly[1].y;
+                                area = xdistance * ydistance;
+                                arrText.push(text);
+                                arrArea.push(area);
+                                arrXdistance.push(xdistance);
+                                arrYdistance.push(ydistance);
+                            };
+                            narr = arrArea.slice(1, arrArea.length);
+                            var item = Math.max.apply(Math, narr);
+                            var index = narr.indexOf(item);
                             res.statusCode=200;
-                            var text = results[0].textAnnotations[0].description;
+                            var text = arrText[index+1];
                             var find = '\n';
                             var re = new RegExp(find, 'g');
                             text = text.replace(re, ' ');
-                            res.json({"text": text}); // Further processing required to remove \n and ensure single spaces only
+                            res.json({"name": text}); // Further processing required to remove \n and ensure single spaces only
                         }
                     }
                 });
@@ -44,4 +63,4 @@ const extractText = (req, res) => {
         res.json({"error":err.message, "message":"Failed to extract text"});
     };
 }
-module.exports = {extractText};
+module.exports = {extractName};
