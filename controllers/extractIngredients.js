@@ -2,8 +2,8 @@ const vision = require('@google-cloud/vision');
 
 const client = new vision.ImageAnnotatorClient();
 
-// async function extractText (req, res) {
-const extractText = (req, res) => {
+// async function extractIngredients (req, res) {
+const extractIngredients = (req, res) => {
     try {
         const bucketName = req.params.bucketName;
         const fileName = req.params.fileName;
@@ -25,7 +25,7 @@ const extractText = (req, res) => {
                             var find = '\n';
                             var re = new RegExp(find, 'g');
                             text = text.replace(re, ' ');
-                            res.json({"text": text.split("\n")}); // Further processing required to remove \n and ensure single spaces only
+                            res.json({"text": text.split(",")}); // Further processing required to remove \n and ensure single spaces only
                         }
                     }
                 });
@@ -42,4 +42,4 @@ const extractText = (req, res) => {
         res.json({"error":err.message, "message":"Failed to extract text"});
     };
 }
-module.exports = {extractText};
+module.exports = {extractIngredients};

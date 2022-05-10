@@ -1,7 +1,5 @@
-const {Storage} = require('@google-cloud/storage');
 const vision = require('@google-cloud/vision');
 
-const storage = new Storage();
 const client = new vision.ImageAnnotatorClient();
 
 // async function extractText (req, res) {
@@ -24,8 +22,8 @@ const extractName = (req, res) => {
                         } else {
                             var arrText = [];
                             var arrArea = [];
-                            var arrXdistance = [];
-                            var arrYdistance = [];
+                            // var arrXdistance = [];
+                            // var arrYdistance = [];
                             textAnnotations = results[0].textAnnotations
                             for (item in textAnnotations) {
                                 text = textAnnotations[item].description;
@@ -35,8 +33,8 @@ const extractName = (req, res) => {
                                 area = xdistance * ydistance;
                                 arrText.push(text);
                                 arrArea.push(area);
-                                arrXdistance.push(xdistance);
-                                arrYdistance.push(ydistance);
+                                // arrXdistance.push(xdistance);
+                                // arrYdistance.push(ydistance);
                             };
                             narr = arrArea.slice(1, arrArea.length);
                             var item = Math.max.apply(Math, narr);
@@ -46,7 +44,7 @@ const extractName = (req, res) => {
                             var find = '\n';
                             var re = new RegExp(find, 'g');
                             text = text.replace(re, ' ');
-                            res.json({"name": text}); // Further processing required to remove \n and ensure single spaces only
+                            res.json({"name": text.toUpperCase()}); // Further processing required to remove \n and ensure single spaces only
                         }
                     }
                 });
