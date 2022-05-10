@@ -4,10 +4,9 @@ const firestore = new Firestore();
 
 async function addItem (req, res) {
     try {
-        console.log(req.body);
-        var data = JSON.parse(req.body);
-        console.log(data);
-        message = await firestore.collection('food').doc('food-items-database').set(data);
+        var data = req.body;
+        var docID = req.params.docID;
+        message = await firestore.collection('food').doc(docID).set(data);
         res.statusCode=200;
         res.json({"message": message});        
     } catch (err) {
