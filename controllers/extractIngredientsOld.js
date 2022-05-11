@@ -2,6 +2,7 @@ const vision = require('@google-cloud/vision');
 
 const client = new vision.ImageAnnotatorClient({'keyFilename': 'credentials.json'});
 
+// async function extractIngredients (req, res) {
 const extractIngredients = (req, res) => {
     try {
         const bucketName = req.params.bucketName;
@@ -21,20 +22,33 @@ const extractIngredients = (req, res) => {
                         } else {
                             res.statusCode=200;
                             var text = results[0].textAnnotations[0].description;
-                            text = text.replace(RegExp('\n', 'g'), ' ');
-                            text = text.replace(/[().]/g, ',');
-                            var l = text.split(',');
+                            var find = '\n';
+                            var re = new RegExp(find, 'g');
+                            text = text.replace(re, ' ');
+                            var l = text.split(",");
                             var rl = [];
+                            var mainIngredient = "";
                             var temp = NaN;
                             for (i in l) {
-                                temp = l[i];
-                                if ( (/\d/.test(temp)) == false ) {
-                                    temp = temp.toUpperCase().replace("INGREDIENTS","").trim();
-                                    if (temp.split(" ").length <= 5 && temp != "") {
-                                        rl.push(temp)
-                                    }
+                                if (l[i].includes("(") && l[i].includes(")")) {
+                                    temp = l[i];
+                                } else if (l[i].includes("(")) {
+                                    mainIngredient = l[i].split("(")[0];
+                                    var secondIngredient = l[i].split("(")[1];
+                                    temp = mainIngredient.trim() + " - " + secondIngredient.trim();
+                                } else if (l[i].includes(")")) {
+                                    var secondIngredient = l[i].split(")")[0];
+                                    temp = mainIngredient.trim() + " - " + secondIngredient.trim();
+                                    // temp = mainIngredient.concat(" - ", secondIngredient.trim())
+                                    mainIngredient = "";
+                                } else (temp = l[i]);
+
+                                temp = temp.toUpperCase().replace("INGREDIENTS","").trim();
+                                if (temp.split(" ").length <= 5) {
+                                    rl.push(temp)
                                 }
                             };
+
                             res.json({"text": rl}); // Further processing required to remove \n and ensure single spaces only
                         }
                     }
