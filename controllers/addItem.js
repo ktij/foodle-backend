@@ -1,6 +1,6 @@
 const {Firestore} = require('@google-cloud/firestore');
 
-const firestore = new Firestore();
+const firestore = new Firestore({'keyFilename': 'credentials.json'});
 
 async function addItem (req, res) {
     try {

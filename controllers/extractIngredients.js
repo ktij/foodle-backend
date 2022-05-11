@@ -1,6 +1,6 @@
 const vision = require('@google-cloud/vision');
 
-const client = new vision.ImageAnnotatorClient();
+const client = new vision.ImageAnnotatorClient({'keyFilename': 'credentials.json'});
 
 // async function extractIngredients (req, res) {
 const extractIngredients = (req, res) => {

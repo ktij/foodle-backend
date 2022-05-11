@@ -1,6 +1,6 @@
 const {Storage} = require('@google-cloud/storage');
 
-const storage = new Storage();
+const storage = new Storage({'keyFilename': 'credentials.json'});
 
 const getItems = (req, res) => {
     try {
