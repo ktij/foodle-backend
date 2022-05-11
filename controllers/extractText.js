@@ -17,8 +17,8 @@ const extractText = (req, res) => {
                         res.json({"error": results[0].error.message});
                     } else { // no error
                         if (results[0].textAnnotations.length === 0) { // if text annotations is blank
-                            res.statusCode=200;
-                            res.json({"text": ""});
+                            res.statusCode=400;
+                            res.json({"error": "No text found"});
                         } else {
                             res.statusCode=200;
                             var text = results[0].textAnnotations[0].description;
