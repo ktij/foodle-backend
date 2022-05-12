@@ -23,7 +23,7 @@ async function addNewItem (req, res) {
         var rec = {
             "productName": "Recommendation",
             "productBarcode": 654321,
-            "imageURL": "gcp.bucket/reco.png",
+            "imageURL": "",
             "categories": [
                 "Biscuit"
             ],
@@ -49,7 +49,7 @@ async function addNewItem (req, res) {
         var data = {
             "productName": name,
             "productBarcode": docID,
-            "imageURL": `gs://${bucketName}/${frontImage}`,
+            "imageURL": `https://storage.googleapis.com/${bucketName}/${frontImage}`,
             "categories": categories,
             "ingredients": rIngredients,
             "nutrition": [
