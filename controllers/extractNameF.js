@@ -11,7 +11,8 @@ async function extractNameF(fileName) {
             return {"error": results[0].error.message};
         } else { // no error
             if (results[0].textAnnotations.length === 0) { // if text annotations is blank
-                return {"error": "No text found"};
+                // return {"error": "No text found"};
+                return "";
             } else {
                 var arrText = [];
                 var arrArea = [];

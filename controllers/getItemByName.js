@@ -2,6 +2,9 @@ const {Firestore} = require('@google-cloud/firestore');
 
 const firestore = new Firestore({'keyFilename': 'credentials.json'});
 
+// const snapshot = await firebase.firestore().collection('events').get()
+// return snapshot.docs.map(doc => doc.data());
+
 async function getItemByName (req, res) {
     // try {
     //     var docID = req.params.name;

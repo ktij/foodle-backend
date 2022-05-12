@@ -1,7 +1,7 @@
 const vision = require('@google-cloud/vision');
 
-// const client = new vision.ImageAnnotatorClient({'keyFilename': 'credentials.json'});
-const client = new vision.ImageAnnotatorClient({'keyFilename': 'C:\\Users\\kshit\\Desktop\\git\\foodle-backend\\credentials.json'});
+const client = new vision.ImageAnnotatorClient({'keyFilename': 'credentials.json'});
+// const client = new vision.ImageAnnotatorClient({'keyFilename': 'C:\\Users\\kshit\\Desktop\\git\\foodle-backend\\credentials.json'});
 
 async function extractIngredientsF(fileName) {
     bucketName = "foodle";
@@ -11,7 +11,8 @@ async function extractIngredientsF(fileName) {
             return {"error": results[0].error.message};
         } else { // no error
             if (results[0].textAnnotations.length === 0) { // if text annotations is blank
-                return {"error": "No text found"};
+                // return {"error": "No text found"};
+                return "";
             } else {
                 var text = results[0].textAnnotations[0].description;
                 text = text.replace(RegExp('\n', 'g'), ' ');
