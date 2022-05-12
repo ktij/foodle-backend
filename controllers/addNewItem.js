@@ -1,22 +1,29 @@
 const {Firestore} = require('@google-cloud/firestore');
 
-const { addItem } = require('../controllers/addItem');
-const { extractName } = require('../controllers/extractName');
-const { extractIngredients } = require('../controllers/extractIngredients');
+const { extractNameF } = require('../controllers/extractNameF');
+const { extractIngredientsF } = require('../controllers/extractIngredientsF');
 
 const firestore = new Firestore({'keyFilename': 'credentials.json'});
 
 async function addNewItem (req, res) {
     try {
-        // var docID = req.params.docID;
-        // var bucketName = req.params.bucketName;
-        // var frontImage = req.params.frontImage;
-        // var ingredientsImage = req.params.ingredientsImage;
-        // itemName = await extractName({params:{bucketName:bucketName, frontImage:frontImage}});
+        var bucketName = "foodle";
+        var docID = req.params.docID;
+        var frontImage = req.params.frontImage;
+        var ingredientsImage = req.params.ingredientsImage;
+
+        var name = await extractNameF(frontImage);
+        var ingredients = await extractIngredientsF(ingredientsImage);
+        var rIngredients = [];
+        for (i in ingredients) {rIngredients.push({"name": ingredients[i]})}
+        var categories = [
+            'biscuits'
+        ]; // NEED TO IMPLEMENT
+
         var rec = {
-            "productName": "smth else",
-            "productBarcode": 123456,
-            "imageURL": "gcp.bucket/timtams.png",
+            "productName": "Recommendation",
+            "productBarcode": 654321,
+            "imageURL": "gcp.bucket/reco.png",
             "categories": [
                 "Biscuit"
             ],
@@ -40,20 +47,11 @@ async function addNewItem (req, res) {
             ]
         };
         var data = {
-            "productName": "Tim Tams",
-            "productBarcode": 123456,
-            "imageURL": "gcp.bucket/timtams.png",
-            "categories": [
-                "Biscuit"
-            ],
-            "ingredients": [
-                {
-                    "name": "Milk"
-                },
-                {
-                    "name": "Chocolate"
-                }
-            ],
+            "productName": name,
+            "productBarcode": docID,
+            "imageURL": `gs://${bucketName}/${frontImage}`,
+            "categories": categories,
+            "ingredients": rIngredients,
             "nutrition": [
                 {
                     "name": "Sugar",
@@ -69,6 +67,7 @@ async function addNewItem (req, res) {
                 rec
             ]
         };
+        message = await firestore.collection('food').doc(docID).set(data);
         res.statusCode=200;
         res.json({"data": data});    
     } catch (err) {

@@ -8,7 +8,7 @@ const extractIngredients = (req, res) => {
         const fileName = req.params.fileName;
 
         async function callVisionAI() {
-            // try {
+            try {
                 await client.textDetection(`gs://${bucketName}/${fileName}`)
                 .then((results) => {
                     if (results[0].error != null) { // if error message is returned
@@ -39,10 +39,10 @@ const extractIngredients = (req, res) => {
                         }
                     }
                 });
-            // } catch (err) {
-            //     res.statusCode=400;
-            //     res.json({"error":err.message, "message":"Failed to extract text"});
-            // };
+            } catch (err) {
+                res.statusCode=400;
+                res.json({"error":err.message, "message":"Failed to extract text"});
+            };
         }
         
         callVisionAI();

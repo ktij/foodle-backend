@@ -41,9 +41,7 @@ const extractName = (req, res) => {
                             var index = narr.indexOf(item);
                             res.statusCode=200;
                             var text = arrText[index+1];
-                            var find = '\n';
-                            var re = new RegExp(find, 'g');
-                            text = text.replace(re, ' ');
+                            text = text.replace(/\n/g, ' ');
                             res.json({"name": text.toUpperCase()}); // Further processing required to remove \n and ensure single spaces only
                         }
                     }
