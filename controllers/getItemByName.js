@@ -2,12 +2,42 @@ const {Firestore} = require('@google-cloud/firestore');
 
 const firestore = new Firestore({'keyFilename': 'credentials.json'});
 
-// const snapshot = await firebase.firestore().collection('events').get()
-// return snapshot.docs.map(doc => doc.data());
+
 
 async function getItemByName (req, res) {
     // try {
-    //     var docID = req.params.name;
+        var name = req.body.name;
+        name = name.toUpperCase();
+        console.log(name);
+
+        const snapshot = await firestore.collection('food').get()
+        data = snapshot.docs.map(doc => doc.data());
+
+        returnItem = NaN;
+
+        for (i in data) {
+            itemName = data[i].productName;
+            console.log(itemName);
+            if (name == itemName) {
+                returnItem = data[i];
+            }
+        };
+        if (returnItem != NaN) {
+            res.status = 200;
+            res.json({"data": returnItem})
+        } else {
+            res.status = 400;
+            res.json({"message": "Item not found"})
+        }
+        // res.status = 400;
+        // res.json({"message": "Item not found"});
+    // } catch (err) {
+    //     res.statusCode=400;
+    //     res.json({"error":err.message, "message": "Failed to get item"});
+    // }
+    
+    // try {
+    //     var docID = req.params.docID;
     //     var doc = await firestore.collection('food').doc(docID).get();
     //     if (!doc.exists) {
     //         res.statusCode=400;
@@ -20,63 +50,5 @@ async function getItemByName (req, res) {
     //     res.statusCode=400;
     //     res.json({"error":err.message, "message": "Failed to add item"});
     // }
-    var rec = {
-        "productName": "smth else",
-        "productBarcode": 123456,
-        "imageURL": "gcp.bucket/timtams.png",
-        "categories": [
-            "Biscuit"
-        ],
-        "ingredients": [
-            {
-                "name": "Milk"
-            },
-            {
-                "name": "Chocolate"
-            }
-        ],
-        "nutrition": [
-            {
-                "name": "Sugar",
-                "percentage": 5
-            },
-            {
-                "name": "Fat",
-                "percentage": 5
-            }
-        ]
-    };
-    var data = {
-        "productName": "Tim Tams",
-        "productBarcode": 123456,
-        "imageURL": "gcp.bucket/timtams.png",
-        "categories": [
-            "Biscuit"
-        ],
-        "ingredients": [
-            {
-                "name": "Milk"
-            },
-            {
-                "name": "Chocolate"
-            }
-        ],
-        "nutrition": [
-            {
-                "name": "Sugar",
-                "percentage": 5
-            },
-            {
-                "name": "Fat",
-                "percentage": 5
-            }
-        ],
-        "recommendations": [
-            rec,
-            rec
-        ]
-    };
-    res.statusCode=200;
-    res.json({"data": data});
 }
 module.exports = {getItemByName};

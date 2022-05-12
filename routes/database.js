@@ -17,6 +17,6 @@ var jsonParser = bodyParser.json()
 databaseRouter.post('/add-item/:docID', jsonParser, addItem);
 databaseRouter.get('/get-item/:docID', jsonParser, getItem);
 databaseRouter.post('/add-new-item/:docID/:frontImage/:ingredientsImage', addNewItem);
-databaseRouter.get('/get-item-by-name/:name', jsonParser, getItemByName);
+databaseRouter.post('/get-item-by-name', jsonParser, getItemByName);
 
 module.exports = databaseRouter;

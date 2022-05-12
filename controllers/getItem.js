@@ -15,7 +15,7 @@ async function getItem (req, res) {
         }
     } catch (err) {
         res.statusCode=400;
-        res.json({"error":err.message, "message": "Failed to add item"});
+        res.json({"error":err.message, "message": "Failed to get item"});
     }
 }
 module.exports = {getItem};

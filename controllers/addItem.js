@@ -5,6 +5,7 @@ const firestore = new Firestore({'keyFilename': 'credentials.json'});
 async function addItem (req, res) {
     try {
         var data = req.body;
+        console.log(data);
         var docID = req.params.docID;
         message = await firestore.collection('food').doc(docID).set(data);
         res.statusCode=200;
