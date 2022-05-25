@@ -35,32 +35,7 @@ async function addNewItem (req, res) {
         for (i in ingredients) {rIngredients.push({"name": ingredients[i]})}
 
 
-        var rec = {
-            "productName": "Recommendation",
-            "productBarcode": 654321,
-            "imageURL": "",
-            "categories": [
-                "Biscuit"
-            ],
-            "ingredients": [
-                {
-                    "name": "Milk"
-                },
-                {
-                    "name": "Chocolate"
-                }
-            ],
-            "nutrition": [
-                {
-                    "name": "Sugar",
-                    "percentage": 5
-                },
-                {
-                    "name": "Fat",
-                    "percentage": 5
-                }
-            ]
-        };
+        var rec = [];
         var data = {
             "productName": namee,
             "productBarcode": docID,
@@ -68,10 +43,7 @@ async function addNewItem (req, res) {
             "categories": categories,
             "ingredients": rIngredients,
             "nutrition": nutrition,
-            "recommendations": [
-                rec,
-                rec
-            ]
+            "recommendtaions": [{recommendation: "Higher Protein", productID: "123"}, {recommendation: "Lower Carbs", productID: "456"}]
         };
         message = await firestore.collection('food').doc(docID).set(data);
         res.statusCode=200;
