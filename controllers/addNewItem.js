@@ -3,11 +3,12 @@ const {Firestore} = require('@google-cloud/firestore');
 const { extractNameF } = require('../controllers/extractNameF');
 const { extractIngredientsF } = require('../controllers/extractIngredientsF');
 const { extractNutritionF } = require('../controllers/extractNutritionF');
+const {extractCategoryF} = require('../controllers/extractCategoryF');
 
 const firestore = new Firestore({'keyFilename': 'credentials.json'});
 
 async function addNewItem (req, res) {
-    // try {
+    try {
         var bucketName = "foodle";
         var docID = req.params.docID;
         var frontImage = req.params.frontImage;
@@ -22,10 +23,12 @@ async function addNewItem (req, res) {
             var nameD = extractNameF(frontImage);
             var ingredientsD = extractIngredientsF(ingredientsImage);
             var nutritionD = extractNutritionF(nutritionImage);
+            var categoryD = extractCategoryF(frontImage);
 
             namee = await nameD;
             ingredients = await ingredientsD;
             nutrition = await nutritionD;
+            category = await categoryD;
 
         };
 
@@ -35,22 +38,23 @@ async function addNewItem (req, res) {
         for (i in ingredients) {rIngredients.push({"name": ingredients[i]})}
 
 
-        var rec = [];
+        var rec = [{recommendation: "Higher Protein", productID: "9300695008826"}, {recommendation: "Lower Carbs", productID: "9403110062707"}];
+
         var data = {
             "productName": namee,
             "productBarcode": docID,
             "imageURL": `https://storage.googleapis.com/${bucketName}/${frontImage}`,
-            "categories": categories,
+            "categories": category,
             "ingredients": rIngredients,
             "nutrition": nutrition,
-            "recommendtaions": [{recommendation: "Higher Protein", productID: "123"}, {recommendation: "Lower Carbs", productID: "456"}]
+            "recommendtaions": rec
         };
         message = await firestore.collection('food').doc(docID).set(data);
         res.statusCode=200;
         res.json({"data": data});    
-    // } catch (err) {
-    //     res.statusCode=400;
-    //     res.json({"error":err.message, "message": "Failed to add item"});
-    // }
-}
+    } catch (err) {
+        res.statusCode=400;
+        res.json({"error":err.message, "message": "Failed to add item"});
+    }
+};
 module.exports = {addNewItem};
