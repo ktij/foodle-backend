@@ -16,7 +16,7 @@ async function extractCategoryF(fileName) {
             } else {
                 var text = results[0].textAnnotations[0].description;
                 text = text.toUpperCase();
-                var categories = [['BISCUIT','COOKIE'], ['BAR'], ['CHIP']];
+                var categories = [['BISCUIT','COOKIE'], ['BAR'], ['CHEESE','CHEDDAR']];
 
                 var cat = '';
                 

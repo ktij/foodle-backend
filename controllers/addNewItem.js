@@ -9,7 +9,7 @@ const {getRecommendationsF} = require('../controllers/getRecommendationsF');
 const firestore = new Firestore({'keyFilename': 'credentials.json'});
 
 async function addNewItem (req, res) {
-    try {
+    // try {
         var bucketName = "foodle";
         var docID = req.params.docID;
         var frontImage = req.params.frontImage;
@@ -34,13 +34,15 @@ async function addNewItem (req, res) {
         var rIngredients = [];
         for (i in ingredients) {rIngredients.push({"name": ingredients[i]})};
 
-        for (i in nutrition) { // replace ' with " so its parsable by JSON
-            nutrition[i] = nutrition[i].replace(/'/g, '"');
-        };
+        // for (i in nutrition) { // replace ' with " so its parsable by JSON
+        //     nutrition[i] = nutrition[i].replace(/'/g, '"');
+        // };
 
-        rNutrition = [JSON.parse(nutrition[0]), JSON.parse(nutrition[1])];
+        // rNutrition = [JSON.parse(nutrition[0]), JSON.parse(nutrition[1])];
 
-        var rec = [{recommendation: "Higher Protein", productID: "9300695008826"}, {recommendation: "Lower Carbs", productID: "9403110062707"}];
+        r = await getRecommendationsF(docID);
+        r = r[0].replace(/'/g, '"');
+        var rec = JSON.parse(r);
 
         var data = {
             "productName": namee,
@@ -48,16 +50,16 @@ async function addNewItem (req, res) {
             "imageURL": `https://storage.googleapis.com/${bucketName}/${frontImage}`,
             "categories": category,
             "ingredients": rIngredients,
-            "nutritionCategories": rNutrition[0],
-            "nutrition": rNutrition[1],
-            "recommendtaions": rec
+            "nutritionCategories": nutrition[0],
+            "nutrition": nutrition[1],
+            "recommendations": rec
         };
         message = await firestore.collection('food').doc(docID).set(data);
         res.statusCode=200;
         res.json({"data": data});    
-    } catch (err) {
-        res.statusCode=400;
-        res.json({"error":err.message, "message": "Failed to add item"});
-    }
+    // } catch (err) {
+    //     res.statusCode=400;
+    //     res.json({"error":err.message, "message": "Failed to add item"});
+    // }
 };
 module.exports = {addNewItem};

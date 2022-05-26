@@ -16,7 +16,7 @@ async function extractIngredientsF(fileName) {
             } else {
                 var text = results[0].textAnnotations[0].description;
                 text = text.replace(RegExp('\n', 'g'), ' ');
-                text = text.replace(/[().]/g, ',');
+                text = text.replace(/[().\[\]]/g, ',');
                 var l = text.split(',');
                 var rl = [];
                 var temp = NaN;

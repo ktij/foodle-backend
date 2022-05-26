@@ -1,6 +1,9 @@
+from ast import excepthandler
 import boto3
 import sys
 import urllib
+
+from matplotlib.pyplot import table
 
 
 def get_rows_columns_map(table_result, blocks_map):
@@ -131,7 +134,11 @@ def parse(table_csv):
 
 def main(url):
     table_csv = get_table_csv_results(url)
-    parse(table_csv)
+    try:
+        parse(table_csv)
+    except:
+        print([])
+        print([])
 
 if __name__ == "__main__":
     url = sys.argv[1]

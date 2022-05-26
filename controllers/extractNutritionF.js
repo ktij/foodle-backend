@@ -20,7 +20,16 @@ async function extractNutritionF(fileName) {
                 return resolve(results);
             });
         });
-        return result;
+
+        nutrition = result;
+
+        for (i in nutrition) { // replace ' with " so its parsable by JSON
+            nutrition[i] = nutrition[i].replace(/'/g, '"');
+        };
+
+        var rNutrition = [JSON.parse(nutrition[0]), JSON.parse(nutrition[1])];
+
+        return rNutrition;
 
     } catch (err) {
         return {"error":err.message, "message": "Failed to get nutrition"};
