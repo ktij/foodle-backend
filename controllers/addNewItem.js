@@ -4,7 +4,7 @@ const { extractNameF } = require('../controllers/extractNameF');
 const { extractIngredientsF } = require('../controllers/extractIngredientsF');
 const { extractNutritionF } = require('../controllers/extractNutritionF');
 const {extractCategoryF} = require('../controllers/extractCategoryF');
-// const {getRecommendationsF} = require('../controllers/getRecommendationsF');
+const {getRecommendationsF} = require('../controllers/getRecommendationsF');
 
 const firestore = new Firestore({'keyFilename': 'credentials.json'});
 
@@ -33,12 +33,6 @@ async function addNewItem (req, res) {
 
         var rIngredients = [];
         for (i in ingredients) {rIngredients.push({"name": ingredients[i]})};
-
-        // for (i in nutrition) { // replace ' with " so its parsable by JSON
-        //     nutrition[i] = nutrition[i].replace(/'/g, '"');
-        // };
-
-        // rNutrition = [JSON.parse(nutrition[0]), JSON.parse(nutrition[1])];
 
         r = await getRecommendationsF(docID);
         r = r[0].replace(/'/g, '"');
