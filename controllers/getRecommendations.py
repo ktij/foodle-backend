@@ -1,7 +1,5 @@
 import sys
 from google.cloud import firestore
-import pandas as pd
-import json
 
 def main(id):
     db = firestore.Client.from_service_account_json('credentials.json')

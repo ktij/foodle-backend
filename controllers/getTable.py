@@ -1,9 +1,6 @@
-from ast import excepthandler
 import boto3
 import sys
 import urllib
-
-from matplotlib.pyplot import table
 
 
 def get_rows_columns_map(table_result, blocks_map):
