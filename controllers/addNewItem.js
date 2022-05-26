@@ -4,7 +4,7 @@ const { extractNameF } = require('../controllers/extractNameF');
 const { extractIngredientsF } = require('../controllers/extractIngredientsF');
 const { extractNutritionF } = require('../controllers/extractNutritionF');
 const {extractCategoryF} = require('../controllers/extractCategoryF');
-const {getRecommendationsF} = require('../controllers/getRecommendationsF');
+// const {getRecommendationsF} = require('../controllers/getRecommendationsF');
 
 const firestore = new Firestore({'keyFilename': 'credentials.json'});
 
