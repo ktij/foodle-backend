@@ -1,7 +1,7 @@
 const vision = require('@google-cloud/vision');
 
-// const client = new vision.ImageAnnotatorClient({'keyFilename': 'credentials.json'});
-const client = new vision.ImageAnnotatorClient({'keyFilename': 'C:\\Users\\kshit\\Desktop\\git\\foodle-backend\\credentials.json'});
+const client = new vision.ImageAnnotatorClient({'keyFilename': 'credentials.json'});
+// const client = new vision.ImageAnnotatorClient({'keyFilename': 'C:\\Users\\kshit\\Desktop\\git\\foodle-backend\\credentials.json'});
 
 async function extractCategoryF(fileName) {
     bucketName = "foodle";
