@@ -13,15 +13,6 @@ async function extractNutritionF(fileName) {
             args: [url]
         };
 
-        var r_value;
-
-        await PythonShell.run('getTable.py', options, function(err, results) {
-            if (err) throw err;
-            // results is an array consisting of messages collected during execution
-            r_value = results;
-            // return {"nutrition": results};
-        });
-
         const result = await new Promise((resolve, reject) => {
             PythonShell.run('getTable.py', options, function(err, results) {
                 if (err) throw err;

@@ -87,19 +87,19 @@ def generate_table_csv(table_result, blocks_map, table_index):
 
 def parse(table_csv):
     # process
-    tmp = table_csv.split('\n')
+    tmp = table_csv.split("\n")
     l = []
     for i in tmp:
-        if ',' in i:
+        if "," in i:
             l.append(i.strip())
     
     # remove empty cols
     boolOnlyCommaAtStart = True
     boolOnlyCommaAtEnd = True
     for i in l: # for each line
-        if i[0] != ',': # if no comma at start
+        if i[0] != ",": # if no comma at start
             boolOnlyCommaAtStart = False
-        if i[-1] != ',': # if no comma at end
+        if i[-1] != ",": # if no comma at end
             boolOnlyCommaAtEnd = False
     if boolOnlyCommaAtStart:
         for i in range(len(l)):
@@ -115,7 +115,7 @@ def parse(table_csv):
     for i in range(len(l)):
         for o in range(len(l[0])):
             l[i][o] = l[i][o].strip()
-    l[0][0] = 'Nutrient'
+    l[0][0] = "Nutrient"
     
     
     columns = l[0]

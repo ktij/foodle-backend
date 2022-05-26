@@ -4,6 +4,7 @@ const { extractNameF } = require('../controllers/extractNameF');
 const { extractIngredientsF } = require('../controllers/extractIngredientsF');
 const { extractNutritionF } = require('../controllers/extractNutritionF');
 const {extractCategoryF} = require('../controllers/extractCategoryF');
+const {getRecommendationsF} = require('../controllers/getRecommendationsF');
 
 const firestore = new Firestore({'keyFilename': 'credentials.json'});
 
@@ -14,10 +15,6 @@ async function addNewItem (req, res) {
         var frontImage = req.params.frontImage;
         var ingredientsImage = req.params.ingredientsImage;
         var nutritionImage = req.params.nutritionImage;
-
-        var categories = [
-            'biscuits'
-        ]; // NEED TO IMPLEMENT
 
         const parallel = async() => {
             var nameD = extractNameF(frontImage);
@@ -35,8 +32,13 @@ async function addNewItem (req, res) {
         await parallel();
 
         var rIngredients = [];
-        for (i in ingredients) {rIngredients.push({"name": ingredients[i]})}
+        for (i in ingredients) {rIngredients.push({"name": ingredients[i]})};
 
+        for (i in nutrition) { // replace ' with " so its parsable by JSON
+            nutrition[i] = nutrition[i].replace(/'/g, '"');
+        };
+
+        rNutrition = [JSON.parse(nutrition[0]), JSON.parse(nutrition[1])];
 
         var rec = [{recommendation: "Higher Protein", productID: "9300695008826"}, {recommendation: "Lower Carbs", productID: "9403110062707"}];
 
@@ -46,7 +48,8 @@ async function addNewItem (req, res) {
             "imageURL": `https://storage.googleapis.com/${bucketName}/${frontImage}`,
             "categories": category,
             "ingredients": rIngredients,
-            "nutrition": nutrition,
+            "nutritionCategories": rNutrition[0],
+            "nutrition": rNutrition[1],
             "recommendtaions": rec
         };
         message = await firestore.collection('food').doc(docID).set(data);
