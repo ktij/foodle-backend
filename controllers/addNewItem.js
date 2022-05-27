@@ -9,7 +9,7 @@ const {getRecommendationsF} = require('../controllers/getRecommendationsF');
 const firestore = new Firestore({'keyFilename': 'credentials.json'});
 
 async function addNewItem (req, res) {
-    // try {
+    try {
         var bucketName = "foodle";
         var docID = req.params.docID;
         var frontImage = req.params.frontImage;
@@ -51,9 +51,9 @@ async function addNewItem (req, res) {
         message = await firestore.collection('food').doc(docID).set(data);
         res.statusCode=200;
         res.json({"data": data});    
-    // } catch (err) {
-    //     res.statusCode=400;
-    //     res.json({"error":err.message, "message": "Failed to add item"});
-    // }
+    } catch (err) {
+        res.statusCode=400;
+        res.json({"error":err.message, "message": "Failed to add item"});
+    }
 };
 module.exports = {addNewItem};
